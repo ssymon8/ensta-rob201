@@ -17,6 +17,21 @@ class Planner:
 
         # Origin of the odom frame in the map frame
         self.odom_pose_ref = np.array([0, 0, 0])
+    
+    def get_neighbors(self, current_cell):
+        neighbors= np.array()
+
+        for i in range(-1,2):
+            for j in range(-1,2):
+                voisin= [current_cell[0] + i, current_cell[0] + j]
+                if i==0 and j==0:
+                    break
+                else:
+                    np.append(neighbors, voisin)
+        
+        return neighbors
+    
+
 
     def plan(self, start, goal):
         """

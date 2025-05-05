@@ -61,7 +61,7 @@ class MyRobotSlam(RobotAbstract):
         if self.counter % 3==0:
             self.occupancy_grid.display_cv(self.odometer_values())
         
-        print("score: " + str(self.tiny_slam._score(self.lidar(),self.odometer_values())))
+        print("score: " + str(self.tiny_slam.localise(self.lidar(),self.odometer_values())))
         return self.control_tp2()
 
     def control_tp1(self):

@@ -45,7 +45,7 @@ class TinySlam:
 
         return score
 
-    def get_corrected_pose(self, odom_pose, odom_pose_ref):
+    def get_corrected_pose(self, odom_pose, odom_pose_ref=None):
         """
         Compute corrected pose in map frame from raw odom pose + odom frame pose,
         either given as second param or using the ref from the object
@@ -53,7 +53,7 @@ class TinySlam:
         odom_pose_ref : optional, origin of the odom frame if given,
                         use self.odom_pose_ref if not given
         """
-        if odom_pose_ref==None:
+        if odom_pose_ref is None:
             odom_pose_ref= self.odom_pose_ref
         
         x_ref, y_ref, theta_ref = odom_pose_ref[0], odom_pose_ref[1], odom_pose_ref[2]
@@ -78,7 +78,7 @@ class TinySlam:
         """
 
         best_score = 0
-        ref = self.odom_pose_ref()
+        ref = self.odom_pose_ref
 
         for i in range(LOC_MAX_ITER):
             offset= np.random.normal(0.0, 2.0, (3,1))
@@ -86,8 +86,8 @@ class TinySlam:
             ref[1]= ref[1] + offset[1]
             ref[2]= ref[2] + offset[2]
 
-            new_pose= self.tiny_slam.get_corrected_pose(raw_odom_pose, ref)
-            current_score=self.tiny_slam._score(lidar, new_pose)
+            new_pose= self.get_corrected_pose(raw_odom_pose, ref)
+            current_score=self._score(lidar, new_pose)
 
             if current_score>best_score:
                 best_score=current_score
