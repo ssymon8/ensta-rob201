@@ -32,5 +32,6 @@ if __name__ == '__main__':
     my_world = MyWorld(robot=my_robot, use_shaders=use_shaders)
     simulator = Simulator(the_world=my_world,
                           use_keyboard=False)
+    
 
     simulator.run()
