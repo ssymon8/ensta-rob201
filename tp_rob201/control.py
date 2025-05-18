@@ -70,13 +70,15 @@ def potential_field_control(lidar, current_pose, goal_pose):
         grad_f_goal = [0, 0]
    
     # Obstacle avoidance parameters
-    K_obs = 1000 # Strength of obstacle avoidance
-    d_safe = 250.0  # Safe distance from obstacles
+    K_obs = 10000 # Strength of obstacle avoidance
+    d_safe = 500.0  # Safe distance from obstacles
    
     # Initialize obstacle gradient
     grad_f_obs = np.zeros(2)
 
     d_obs= min(ranges)
+
+    print(d_obs)
     angle= angles[np.argmin(ranges)]
    
     obs_x = d_obs * np.cos(angle)
@@ -92,7 +94,7 @@ def potential_field_control(lidar, current_pose, goal_pose):
 
     if d_obs < d_safe:
                
-        repulsive_factor = (K_obs / (d_obs**3)) * (1/d_obs - 1/d_safe)
+        repulsive_factor = (K_obs / (d_obs**2)) * (1/d_obs - 1/d_safe)
 
         obstacle_vector=[ q[0] - q_obs[0],
                          q[1] - q_obs[1]]
@@ -121,9 +123,12 @@ def potential_field_control(lidar, current_pose, goal_pose):
     angle_error = (angle_error + np.pi) % (2 * np.pi) - np.pi
     
     # CONTROLEUR PROPORTIONNEL
-    K_p = 0.1
+    K_p = 0.15
     forward = min(K_p * np.linalg.norm(grad), 1) if d_goal >= 40 else 0
     rotation = np.clip(K_p * angle_error, -1, 1)
+
+    print(forward)
+    print(rotation)
     
     # COMMANDE
     if d_goal < 40:
