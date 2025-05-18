@@ -40,6 +40,24 @@ class TinySlam:
 
         x_map, y_map = self.grid.conv_world_to_map(x_lidar, y_lidar)
 
+        # on enleve ce qui est en dehors de la grille
+        
+        x_inside = np.where(x_map < self.grid.x_max_map)
+        x_map = x_map[x_inside]
+        y_map = y_map[x_inside]
+
+        x2_inside = np.where(x_map > -1)
+        x_map = x_map[x2_inside]
+        y_map = y_map[x2_inside]
+
+        y_inside = np.where(y_map < self.grid.y_max_map)
+        x_map = x_map[y_inside]
+        y_map = y_map[y_inside]
+
+        y2_inside = np.where(y_map > -1)
+        x_map = x_map[y2_inside]
+        y_map = y_map[y2_inside]
+
         #for x in x_map:
         score= np.sum(map[x_map,y_map])
 
